@@ -255,7 +255,6 @@ export default function App() {
     const saved = localStorage.getItem("commitments");
     return saved ? JSON.parse(saved) : initialCommitments;
   });
-  const [nextId, setNextId] = useState(100);
 
   useEffect(() => {
     localStorage.setItem("commitments", JSON.stringify(commitments));
@@ -309,8 +308,7 @@ export default function App() {
 
   const addCommitment = () => {
     if (!newCom.name.trim()) return;
-    setCommitments(prev => [...prev, { id: nextId, name: newCom.name.trim(), category: newCom.category, tasks: [] }]);
-    setNextId(n => n + 1);
+    setCommitments(prev => [...prev, { id: Date.now(), name: newCom.name.trim(), category: newCom.category, tasks: [] }]);
     setNewCom({ name: "", category: "Academic" });
     setShowAddCommitment(false);
   };
@@ -330,10 +328,9 @@ export default function App() {
     setCommitments(prev => prev.map(c =>
       c.id !== comId ? c : {
         ...c,
-        tasks: [...c.tasks, { id: nextId, text: newTask.text.trim(), priority: newTask.priority, due: newTask.due, done: false }]
+        tasks: [...c.tasks, { id: Date.now(), text: newTask.text.trim(), priority: newTask.priority, due: newTask.due, done: false }]
       }
     ));
-    setNextId(n => n + 1);
     setNewTask({ text: "", priority: "Medium", due: "" });
     setAddTaskFor(null);
   };
